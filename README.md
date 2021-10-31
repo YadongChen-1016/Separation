@@ -1,3 +1,3 @@
 # Code will be updated soon...
-This is the repo of the manuscript "Multi-stage Network for Monaural Singing Voice and Accompaniment Separation", which is to be submitted to JASA. The code will be released after the manuscript submission. 
+This is the repo of the manuscript "A Multi-stage Network with Dual Branch Attention and Hybrid Convolution Mechanism for Monaural Singing Voice and Accompaniment Separation". The code will be released after the manuscript submission. 
 
