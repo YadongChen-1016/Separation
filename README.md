@@ -1,3 +1,3 @@
 # Code will be updated soon...
-This is the repo of the manuscript "Multi-stage Network with Dual Branch Attention and Hybrid Convolution Mechanism for Monaural Singing Voice and Accompaniment Separation". The code will be released after the manuscript submission. 
+This is the repo of the manuscript "Multi-Stage Separation Network with Dual-Branch Attention and Hybrid Convolution". The code will be released after the manuscript submission. 
 
