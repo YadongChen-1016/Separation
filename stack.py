@@ -7,13 +7,8 @@ from torch.nn import functional as F
 # from TFAttention import TFA
 from CrIssCrossAttention import CC_module as CCA
 
-
-
-
 def judge(input, output, predict):
     return torch.mean(torch.abs(predict.mul(input) - output))
-
-
 
 
 class MMDenseNet(nn.Module):
@@ -151,30 +146,6 @@ class LSTMBlock(nn.Module):
         # batch_size x time x freq
         return x.permute(0, 2, 1).unsqueeze(1)
 
-
-
-class SoftPooling2D(torch.nn.Module):
-    def __init__(self, kernel_size, strides=None, padding=0, ceil_mode=False, count_include_pad=True, divisor_override=None):
-        super(SoftPooling2D, self).__init__()
-        self.avgpool = torch.nn.AvgPool2d(kernel_size, strides, padding, ceil_mode, count_include_pad, divisor_override)
-    def forward(self, x):
-        x_exp = torch.exp(x)
-        x_exp_pool = self.avgpool(x_exp)
-        x = self.avgpool(x_exp*x)
-        return x/x_exp_pool
-
-
-def initialize_weights(*models):
-    for model in models:
-        for m in model.modules():
-            if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight.data, nonlinearity='relu')
-            elif isinstance(m, nn.BatchNorm2d):
-                m.weight.data.fill_(1.)
-                m.bias.data.fill_(1e-4)
-            elif isinstance(m, nn.Linear):
-                m.weight.data.normal_(0.0, 0.0001)
-                m.bias.data.zero_()
 
 
 
@@ -352,13 +323,7 @@ class StackedMMDenseNet(nn.Module):
         self.prepare = nn.Sequential(Conv(1, 64, kernel_size=3, stride=1),
                                      _DenseBlock(3, 64, 32, drop_rate=0.1)
                                      )
-                                     # TODO 这里PosNet是stride为3，padding为2，之后可以试试，先保持和SHNet一样
-
-
-
-                                     # Conv(64, 128),
-                                     # Conv(128, 128),
-                                     # Conv(128, 32))
+       
 
         self.att1 = RCCAModule(32, 32)
         self.att2 = SELayer(32, reduction=4)
@@ -382,7 +347,6 @@ class StackedMMDenseNet(nn.Module):
         x2 = self.att2(x)
         x = x1 + x2
         # resdual = x
-        # 要输出多个堆叠网络的结果
         predicts = []
         for i in range(self.num_stacks):
             x = self.stack[i](x)
@@ -392,7 +356,6 @@ class StackedMMDenseNet(nn.Module):
             if i != self.num_stacks - 1:
                 x = self.next[i](x) + self.merge[i](predicts[-1]) + x
 
-        # 返回的第一维是多个loss，第二维是batch，后面两个通道
         return torch.stack(predicts, 0)
 
 
@@ -402,11 +365,7 @@ def get_parameter_number(net):
     return {'Total': total_num, 'Trainable': trainable_num}
 
 
-# # a = torch.randn(1,16,300,100)
-# model = MMDenseNet(input_channel=16)
-# # print(model)
-# # print(model(a).size())
-# print(get_parameter_number(model))
+
 
 if __name__ == '__main__':
     from thop import profile
