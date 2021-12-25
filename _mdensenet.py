@@ -1,14 +1,3 @@
-# !/usr/bin/env python
-# -*- encoding: utf-8 -*-
-'''
-@File    :   _mdensenet.py
-@Contact :   liu.8948@buckeyemail.osu.edu
-@License :   (C)Copyright 2020-2021
-@Modify Time      @Author    @Version    @Desciption
-------------      -------    --------    -----------
-2020/5/5 4:10 PM   Haohe Liu      1.0         None
-'''
-
 from torch import nn
 import torch
 import math
